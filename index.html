@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>963 KVK CP Calculate</title>
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 1em;
+            background: #ebebeb;
+        }
+        .form-container {
+            /*width: 500px;*/
+            margin: 0.5em 2em;
+            padding: 1em;
+            /*background: white;*/
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+        .form-title h1 {
+            margin-block-start: 0.1em;
+            margin-block-end: 0.2em;
+        }
+        .form-content {
+            display: grid;
+            grid-template-areas: 'kills kills death death donation donation'
+                                'points points points points points points'
+                                'button button button button button button';
+            column-gap: 2em;
+            row-gap: 1em;
+        }
+        .kill-section { grid-area: kills; }
+        .death-section { grid-area: death; }
+        .donation-section { grid-area: donation; }
+        .points-section { grid-area: points;}
+        .button-section { grid-area: button; }
+        .sections {
+            padding: 2em;
+            background-color: white;
+            border-radius: 0.5em;
+        }
+        .form-row {
+            display: grid;
+            margin-bottom: 1em;
+        }
+        .input-row input {
+            width: 100%;
+        }
+        input[type=number] {
+            font-size: 1em;
+            padding: 0.5em;
+            border: 1.5px solid lightgray;
+            border-radius: 0.5em;
+            transition: .3s border-color;
+        }
+        input:hover {
+            border: 1.5px solid dodgerblue;
+        }
+        .cal_button {
+            width: 100%;
+            padding: 1em;
+            font-size: 1em;
+            color: white;
+            font-weight: bold;
+            border-radius: 0.5em;
+            border: none;
+            background-color: dodgerblue;
+        }
+        .cal_button:hover {
+            cursor: pointer;
+            background-color: deepskyblue;
+        }
+        #total_points {
+            font-weight: bold;
+            font-size: 1.25em;
+        }
+
+        @media only screen and (max-width: 64em) {
+            body {
+                font-size: 3em;
+            }
+            .form-container {
+                width: 100%;
+                margin: auto;
+                padding: 1em;
+            }
+
+            .form-content {
+                display: grid;
+                grid-template-areas: 'kills kills kills kills kills kills'
+                                'death death death death death death'
+                                'donation donation donation donation donation donation'
+                                'points points points points points points'
+                                'button button button button button button';
+                column-gap: 3em;
+                row-gap: 1em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1em;
+            }
+            .sections {
+                padding: 1em;
+            }
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="application/javascript">
+        $(document).ready(function(){
+            $("#calculation_form").submit(function(){
+                calculatePoints()
+                return false;
+            });
+        });
+
+
+        function calculatePoints() {
+            var formEl = document.forms.calculation_form;
+            var formData = new FormData(formEl);
+            var t5Kills = formData.get('t5_kills')=='' || formData.get('t5_kills')<0 ? 0: formData.get('t5_kills');
+            var t4Kills = formData.get('t4_kills')=='' || formData.get('t4_kills')<0 ? 0: formData.get('t4_kills');
+            var t321Kills = formData.get('t321_kills')=='' || formData.get('t321_kills')<0 ? 0: formData.get('t321_kills');;
+            var t5Death = formData.get('t5_death')=='' || formData.get('t5_death')<0 ? 0: formData.get('t5_death');;
+            var t4Death = formData.get('t4_death')=='' || formData.get('t4_death')<0 ? 0: formData.get('t4_death');;
+            var t3Death = formData.get('t3_death')=='' || formData.get('t3_death')<0 ? 0: formData.get('t3_death');;
+            var t2Death = formData.get('t2_death')=='' || formData.get('t2_death')<0 ? 0: formData.get('t2_death');;
+            var t1Death = formData.get('t1_death')=='' || formData.get('t1_death')<0 ? 0: formData.get('t1_death');;
+            var foodDonation = formData.get('food_donation')=='' || formData.get('food_donation')<0 ? 0: formData.get('food_donation');;
+            var woodDonation = formData.get('wood_donation')=='' || formData.get('wood_donation')<0 ? 0: formData.get('wood_donation');;
+            var stoneDonation = formData.get('stone_donation')=='' || formData.get('stone_donation')<0 ? 0: formData.get('stone_donation');;
+            var goldDonation = formData.get('gold_donation')=='' || formData.get('gold_donation')<0 ? 0: formData.get('gold_donation');;
+            console.log(t5Kills, t4Kills, t321Kills, t5Death, t4Death,
+            t3Death, t2Death, t1Death, foodDonation, woodDonation, stoneDonation, goldDonation
+            );
+            var killsPoints = t5Kills * 1.8 + t4Kills * 0.9 + t321Kills * 0.1;
+            var deathPoints = (t5Death * 10 + t4Death * 4 + t3Death * 3 + t2Death * 2 + t1Death * 1) * 1.2;
+            var fwgRatio = 100000 / 100000000;
+            var goldRatio = 500000 / 100000000;
+            var donationPoints = foodDonation * fwgRatio + woodDonation * fwgRatio + stoneDonation * fwgRatio + goldDonation * goldRatio
+            var totalPoints = killsPoints + deathPoints + donationPoints;
+
+            $("#total_points").text(Math.round(totalPoints * 100) / 100);
+        }
+    </script>
+</head>
+<body>
+<div class="main-container">
+    <div class="form-container">
+        <div class="form-title">
+            <h1>贡献点计算器</h1>
+            <h1>Contribution Points Calculator</h1>
+        </div>
+        <form id="calculation_form">
+            <div class="form-content">
+                <div class="death-section sections">
+                    <h2>Death / 阵亡</h2>
+                    <div class="form-row">
+                        <label class="label-text" for="t5_death">No. of T5 death / T5阵亡数</label>
+                        <input class="input-box" id="t5_death" name="t5_death" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t4_death">No. of T4 death / T4阵亡数</label>
+                        <input class="input-box" id="t4_death" name="t4_death" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t3_death">No. of T3 death / T3阵亡数</label>
+                        <input class="input-box" id="t3_death" name="t3_death" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t2_death">No. of T2 death / T2阵亡数</label>
+                        <input class="input-box" id="t2_death" name="t2_death" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t1_death">No. of T1 death / T1阵亡数</label>
+                        <input class="input-box" id="t1_death" name="t1_death" type="number"/>
+                    </div>
+                </div>
+
+                <div class="donation-section sections">
+                    <h2>Donation / 捐献</h2>
+                    <div class="form-row">
+                        <label class="label-text" for="food_donation">Food donation / 粮食捐献</label>
+                        <input class="input-box" id="food_donation" name="food_donation" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="wood_donation">Wood donation / 木头捐献</label>
+                        <input class="input-box" id="wood_donation" name="wood_donation" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="stone_donation">Stone donation / 石头捐献</label>
+                        <input class="input-box" id="stone_donation" name="stone_donation" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="gold_donation">Gold donation / 金币捐献</label>
+                        <input class="input-box" id="gold_donation" name="gold_donation" type="number"/>
+                    </div>
+                </div>
+
+                <div class="kill-section sections">
+                    <h2>Kills / 击杀</h2>
+                    <div class="form-row">
+                        <label class="label-text" for="t5_kills">No. of T5 Kills / T5击杀数</label>
+                        <input class="input-box" id="t5_kills" name="t5_kills" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t4_kills">No. of T4 Kills / T4击杀数</label>
+                        <input class="input-box" id="t4_kills" name="t4_kills" type="number"/>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="label-text" for="t321_kills">No. of T1-3 Kills / T1-3击杀数</label>
+                        <input class="input-box" id="t321_kills" name="t321_kills" type="number"/>
+                    </div>
+                </div>
+
+                <div class="points-section sections">
+                    <label>Total Points / 总点数: </label>
+                    <span id="total_points">0</span>
+                </div>
+
+                <div class="button-section">
+                    <button id="cal_button" class="cal_button" type="submit"> Calculate / 计算</button>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
